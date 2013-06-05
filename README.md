@@ -5,7 +5,6 @@ Android Package Downloader
 
 
 
-
 Android Apk包下载库
 
 
@@ -18,4 +17,10 @@ Android Apk包下载库
 
 
 
-(Disclaimer: Code not compiled and certainly not tested.)
+
+--shangguangshan chenzhenlei
+
+
+(Disclaimer: Code certainly not tested.)
+
+
