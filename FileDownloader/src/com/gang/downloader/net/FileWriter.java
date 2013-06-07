@@ -1,6 +1,7 @@
 package com.gang.downloader.net;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -92,8 +93,6 @@ public class FileWriter {
 		return 0;
 	}
 	
-	
-	
 	public long open() throws IOException {
 		wFile = new RandomAccessFile(tempFilePath, "rw");
 		return wFile.length();
@@ -108,6 +107,7 @@ public class FileWriter {
 	public long currentPos() throws IOException {
 		return wFile.length();
 	}
+	
 	public void write(byte[] bytes, int len) throws IOException {
 		if (wFile != null) {
 			wFile.write(bytes, 0, len); 
@@ -116,9 +116,27 @@ public class FileWriter {
 	
 	public boolean rename() {
 		close();
+		boolean result = false;
 		File dest = new File(filePath);
 		File src = new File(tempFilePath);
-		return src.renameTo(dest);
+		result = src.renameTo(dest);
+		if (!result) {
+			RandomAccessFile raFile = null;
+			try {
+				raFile = new RandomAccessFile(tempFilePath, "rw");
+				long size = raFile.length();
+				if (size > 0) {
+					raFile.setLength(size - 1);
+				}
+				raFile.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
 	}
 	
 	public boolean close()  {
